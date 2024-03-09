@@ -211,7 +211,7 @@ def prediction():
             )
             .set_global_opts(
                 title_opts=opts.TitleOpts(
-                    title="Predicción del estado de salud", subtitle="% valores en porcentajes"
+                    title=f"Predicción del estado de salud de {id_num}", subtitle="% valores en porcentajes"
                 ),
             )
         )
