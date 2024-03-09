@@ -1,7 +1,6 @@
-import numpy as np
 import streamlit as st
-import tensorflow as tf
 import pandas as pd
+from process import *
 
 from pyecharts import options as opts
 from pyecharts.charts import Bar
@@ -9,22 +8,7 @@ from streamlit_echarts import st_pyecharts
 
 
 
-# Se recibe la imagen y el modelo, devuelve la predicción
-def model_prediction(x_in, model):
-
-    x = np.asarray(x_in).reshape(1, -1)
-    preds = model.predict(x)
-
-    return preds
-
-
 def prediction():  
-    model = ''
-    # Se carga el modelo
-    if model == '':
-        model = tf.keras.models.load_model("models/model_diabetes.h5")
-
-
     # Título
     html_temp = """
     <h1 style="color:#181082;text-align:center;">SISTEMA DE PREDICCIÓN DE DIABETES CON UNA RED NEURONAL PROFUNDA</h1>
@@ -33,8 +17,8 @@ def prediction():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     # Lecctura de datos
-    #Datos = st.text_input("Ingrese los valores para predecir diabetes:")
-    
+    id_num = st.text_input("Ingrese el ID del paciente (cambie el valor por defecto)", value="123456")
+
     HighBP_formulario = st.radio("1.Presión Alta:",('Sin presion Alta', 'Con presión Alta'))
     if HighBP_formulario == 'Sin presion Alta': HighBP = 0
     else: HighBP = 1
@@ -155,13 +139,10 @@ def prediction():
     if Income_formulario == 'De 49.000 a 61.000': Income = 7
     if Income_formulario == 'De 62.000 a 75.000': Income = 8
 
-    ## se crea un dataframe vacio
-    # df = pd.DataFrame(columns=['% NO DIABÉTICO', '% PRE DIABÉTICO', '% DIABÉTICO'])
-
 
     # El botón predicción se usa para iniciar el procesamiento
     if st.button("Predicción:"):
-        #x_in = list(np.float_((Datos.title().split('\t'))))
+        id_num = (id_num)
         x_in = [np.float_(HighBP),
                 np.float_(HighChol),
                 np.float_(CholCheck),
@@ -184,13 +165,24 @@ def prediction():
                 np.float_(Education),
                 np.float_(Income)
                 ]
+        
+        # se crea un archivo input tipo json como ejercicio 
+        # suponiendo que la informacion de los inputs se debe guardar como un historico
+        create_input(id_num,x_in)
 
-        predictS = model_prediction(x_in, model)
+        # se carga el input de entrada a evaluar
+        data = load_input(id_num)
+
+        # se realiza la predicción
+        predictS = model_prediction(data, model)
+
         n = predictS[0].ravel().tolist()
-        nodiabetico = n[0]
-        prediabetico = n[1]
-        diabetico = n[2]
+        nodiabetico = round(n[0]*100, 2)
+        prediabetico = round(n[1]*100, 2)
+        diabetico = round(n[2]*100, 2)
         i = n.index(max(n))
+
+        create_output(id_num, x_in, nodiabetico, prediabetico, diabetico)
 
         if i == 0:
             resultado_final = "No diabetico"
@@ -203,24 +195,23 @@ def prediction():
 
         df = pd.DataFrame(
             {
-                'NO DIABÉTICO': f"{round(nodiabetico*100, 2)}%",
-                'PRE DIABÉTICO': f"{round(prediabetico*100, 2)}%",
-                'DIABÉTICO': f"{round(diabetico*100, 2)}%"
-            }, index=["Resultado"]
+                'NO DIABÉTICO': f"{nodiabetico}%",
+                'PRE DIABÉTICO': f"{prediabetico}%",
+                'DIABÉTICO': f"{diabetico}%"
+            }, index=[f"Resultado de {id_num}"]
         )
         st.dataframe(df)
 
-        st.bar_chart(df)
 
         pie_chart = (
             Bar()
             .add_xaxis(["NO DIABETICO", "PRE DIABÉTICO", "DIABÉTICO"])
             .add_yaxis(
-                "", [round(nodiabetico*100, 2), round(prediabetico*100, 2), round(diabetico*100, 2)]
+                "", [nodiabetico, prediabetico, diabetico]
             )
             .set_global_opts(
                 title_opts=opts.TitleOpts(
-                    title="Predicción del estado de salud", subtitle="% valores en porcentajes"
+                    title=f"Predicción del estado de salud de {id_num}", subtitle="% valores en porcentajes"
                 ),
             )
         )
