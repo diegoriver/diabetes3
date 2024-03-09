@@ -1,0 +1,12 @@
+gunicorn
+numpy
+pandas
+streamlit
+wandb
+watchdog
+tensorflow
+pyyaml 
+h5py
+jinja2
+streamlit-echarts
+pyecharts
