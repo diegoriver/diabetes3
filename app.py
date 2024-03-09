@@ -210,6 +210,10 @@ def prediction():
         )
         st.dataframe(df)
 
+        st.bar_chart(df)
+
+
+
 
 
 if __name__ == '__main__':
