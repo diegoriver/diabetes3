@@ -1,7 +1,6 @@
-import numpy as np
 import streamlit as st
-import tensorflow as tf
 import pandas as pd
+from process import *
 
 from pyecharts import options as opts
 from pyecharts.charts import Bar
@@ -9,22 +8,7 @@ from streamlit_echarts import st_pyecharts
 
 
 
-# Se recibe la imagen y el modelo, devuelve la predicción
-def model_prediction(x_in, model):
-
-    x = np.asarray(x_in).reshape(1, -1)
-    preds = model.predict(x)
-
-    return preds
-
-
 def prediction():  
-    model = ''
-    # Se carga el modelo
-    if model == '':
-        model = tf.keras.models.load_model("models/model_diabetes.h5")
-
-
     # Título
     html_temp = """
     <h1 style="color:#181082;text-align:center;">SISTEMA DE PREDICCIÓN DE DIABETES CON UNA RED NEURONAL PROFUNDA</h1>
@@ -155,13 +139,9 @@ def prediction():
     if Income_formulario == 'De 49.000 a 61.000': Income = 7
     if Income_formulario == 'De 62.000 a 75.000': Income = 8
 
-    ## se crea un dataframe vacio
-    # df = pd.DataFrame(columns=['% NO DIABÉTICO', '% PRE DIABÉTICO', '% DIABÉTICO'])
-
 
     # El botón predicción se usa para iniciar el procesamiento
     if st.button("Predicción:"):
-        #x_in = list(np.float_((Datos.title().split('\t'))))
         x_in = [np.float_(HighBP),
                 np.float_(HighChol),
                 np.float_(CholCheck),
@@ -184,7 +164,8 @@ def prediction():
                 np.float_(Education),
                 np.float_(Income)
                 ]
-
+        
+        
         predictS = model_prediction(x_in, model)
         n = predictS[0].ravel().tolist()
         nodiabetico = n[0]
@@ -210,7 +191,6 @@ def prediction():
         )
         st.dataframe(df)
 
-        # st.bar_chart(df)
 
         pie_chart = (
             Bar()
