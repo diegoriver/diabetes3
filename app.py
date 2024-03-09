@@ -210,7 +210,7 @@ def prediction():
         )
         st.dataframe(df)
 
-        # st.bar_chart(df)
+        st.bar_chart(df)
 
         pie_chart = (
             Bar()
