@@ -17,8 +17,8 @@ def prediction():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     # Lecctura de datos
-    #Datos = st.text_input("Ingrese los valores para predecir diabetes:")
-    
+    id_num = st.text_input("Ingrese el ID del paciente (cambie el valor por defecto)", value="123456")
+
     HighBP_formulario = st.radio("1.Presión Alta:",('Sin presion Alta', 'Con presión Alta'))
     if HighBP_formulario == 'Sin presion Alta': HighBP = 0
     else: HighBP = 1
@@ -142,6 +142,7 @@ def prediction():
 
     # El botón predicción se usa para iniciar el procesamiento
     if st.button("Predicción:"):
+        id_num = (id_num)
         x_in = [np.float_(HighBP),
                 np.float_(HighChol),
                 np.float_(CholCheck),
@@ -165,13 +166,23 @@ def prediction():
                 np.float_(Income)
                 ]
         
-        
-        predictS = model_prediction(x_in, model)
+        # se crea un archivo input tipo json como ejercicio 
+        # suponiendo que la informacion de los inputs se debe guardar como un historico
+        create_input(id_num,x_in)
+
+        # se carga el input de entrada a evaluar
+        data = load_input(id_num)
+
+        # se realiza la predicción
+        predictS = model_prediction(data, model)
+
         n = predictS[0].ravel().tolist()
-        nodiabetico = n[0]
-        prediabetico = n[1]
-        diabetico = n[2]
+        nodiabetico = round(n[0]*100, 2)
+        prediabetico = round(n[1]*100, 2)
+        diabetico = round(n[2]*100, 2)
         i = n.index(max(n))
+
+        create_output(id_num, x_in, nodiabetico, prediabetico, diabetico)
 
         if i == 0:
             resultado_final = "No diabetico"
@@ -184,10 +195,10 @@ def prediction():
 
         df = pd.DataFrame(
             {
-                'NO DIABÉTICO': f"{round(nodiabetico*100, 2)}%",
-                'PRE DIABÉTICO': f"{round(prediabetico*100, 2)}%",
-                'DIABÉTICO': f"{round(diabetico*100, 2)}%"
-            }, index=["Resultado"]
+                'NO DIABÉTICO': f"{nodiabetico}%",
+                'PRE DIABÉTICO': f"{prediabetico}%",
+                'DIABÉTICO': f"{diabetico}%"
+            }, index=[f"Resultado de {id_num}"]
         )
         st.dataframe(df)
 
@@ -196,7 +207,7 @@ def prediction():
             Bar()
             .add_xaxis(["NO DIABETICO", "PRE DIABÉTICO", "DIABÉTICO"])
             .add_yaxis(
-                "", [round(nodiabetico*100, 2), round(prediabetico*100, 2), round(diabetico*100, 2)]
+                "", [nodiabetico, prediabetico, diabetico]
             )
             .set_global_opts(
                 title_opts=opts.TitleOpts(
