@@ -210,9 +210,30 @@ def prediction():
         )
         st.dataframe(df)
 
-        st.bar_chart(df)
+        # st.bar_chart(df)
+
+        pie_chart = (
+            Bar()
+            .add_xaxis(["NO DIABETICO", "PRE DIABÉTICO", "DIABÉTICO"])
+            .add_yaxis(
+                "", [round(nodiabetico*100, 2), round(prediabetico*100, 2), round(diabetico*100, 2)]
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(
+                    title="Predicción del estado de salud", subtitle="% valores en porcentajes"
+                ),
+            )
+        )
+        st_pyecharts(pie_chart)
 
 
+        html = """
+        <div style="color: lightgray;">
+            Created by <a href="https://www.linkedin.com/in/diego-rivera-ai/" 
+            style="color: lightgray; !important; text-decoration: none !important;">Diego Rivera</a>
+        </div>
+        """
+        st.markdown(html, unsafe_allow_html=True)
 
 
 
