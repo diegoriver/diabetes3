@@ -19,7 +19,7 @@ st.markdown(html_temp, unsafe_allow_html=True)
 
 st.markdown(
     """
-    Este sistema desarrolado como un test para AB InBev, ha sido estructurado en dos modos y tres pasos.
+    Este sistema desarrollado ha sido estructurado en dos modos y tres pasos.
     #
 
     ### MODOS
