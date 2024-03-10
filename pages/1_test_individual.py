@@ -1,7 +1,6 @@
-
 import streamlit as st
 import pandas as pd
-from process import *
+from functions import *
 
 from pyecharts import options as opts
 from pyecharts.charts import Bar
@@ -20,12 +19,13 @@ def prediction():
 
     st.markdown(
     """
-        Se debe escoger los datos del formulario siguiente para verificar el funcionamiento 
+        Se debe seleccionar los datos del formulario siguiente para verificar el funcionamiento 
         del sistema de prediccion de la red neuronal.
         Al final se visualizan los resultados. 
     """
     )
 
+    ### se crea el formulario con Streamlit para la entrada de datos
     # Lecctura de datos
     id_num = st.text_input("Ingrese el ID del paciente (cambie el valor por defecto)", value="123456")
 
@@ -176,24 +176,26 @@ def prediction():
                 np.float_(Income)
                 ]
         
+        ### PASO 0: se realiza la creación del input
+        st.markdown("##### PASO 0: se realiza la creación del input...")
         # se crea un archivo input tipo json como ejercicio 
         # suponiendo que la informacion de los inputs se debe guardar como un historico
         create_input(id_num,x_in)
 
-        # se carga el input de entrada a evaluar
-        data = load_input(id_num)
 
-        # se realiza la predicción
-        predictS = model_prediction(data, model)
-
-        n = predictS[0].ravel().tolist()
-        nodiabetico = round(n[0]*100, 2)
-        prediabetico = round(n[1]*100, 2)
-        diabetico = round(n[2]*100, 2)
-        i = n.index(max(n))
-
+        ### PASO 1: se realiza la predicción y creacion del output
+        st.markdown("##### PASO 1: se realiza la predicción y creacion del output...")
+        
+        # hace la prediccion
+        n, nodiabetico, prediabetico, diabetico = prediction_individual(id_num)
+        # crea los resultados de salida
         create_output(id_num, x_in, nodiabetico, prediabetico, diabetico)
 
+
+        ### PASO 2: se realiza la visualización de los datos
+        st.markdown("##### PASO 2: se realiza la visualización de los datos...")
+
+        i = n.index(max(n))
         if i == 0:
             resultado_final = "No diabetico"
         elif i == 1:
@@ -205,14 +207,15 @@ def prediction():
 
         df = pd.DataFrame(
             {
+                'Numero ID': f"{id_num}",
                 'NO DIABÉTICO': f"{nodiabetico}%",
                 'PRE DIABÉTICO': f"{prediabetico}%",
                 'DIABÉTICO': f"{diabetico}%"
-            }, index=[f"Resultado de {id_num}"]
+            }, index=["Resultado"]
         )
         st.dataframe(df)
 
-
+        
         pie_chart = (
             Bar()
             .add_xaxis(["NO DIABETICO", "PRE DIABÉTICO", "DIABÉTICO"])
