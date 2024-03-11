@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from functions import *
+from functions import create_inputs_lote_pacientes, prediction_individual, load_input, create_output
 import os
 
 

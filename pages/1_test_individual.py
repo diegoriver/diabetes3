@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from functions import *
+from functions import create_input, prediction_individual, create_output
 
 from pyecharts import options as opts
 from pyecharts.charts import Bar
@@ -152,28 +152,28 @@ def prediction():
 
     # El botón predicción se usa para iniciar el procesamiento
     if st.button("Predicción:"):
-        id_num = (id_num)
-        x_in = [np.float_(HighBP),
-                np.float_(HighChol),
-                np.float_(CholCheck),
-                np.float_(BMI),
-                np.float_(Smoker),
-                np.float_(Stroke),
-                np.float_(HeartDiseaseorAttack),
-                np.float_(PhysActivity),
-                np.float_(Fruits),
-                np.float_(Veggies),
-                np.float_(HvyAlcoholConsump),
-                np.float_(AnyHealthcare),
-                np.float_(NoDocbcCost),
-                np.float_(GenHlth),
-                np.float_(MentHlth),
-                np.float_(PhysHlth),
-                np.float_(DiffWalk),
-                np.float_(Sex),
-                np.float_(Age),
-                np.float_(Education),
-                np.float_(Income)
+        id_num = id_num
+        x_in = [HighBP,
+                HighChol,
+                CholCheck,
+                BMI,
+                Smoker,
+                Stroke,
+                HeartDiseaseorAttack,
+                PhysActivity,
+                Fruits,
+                Veggies,
+                HvyAlcoholConsump,
+                AnyHealthcare,
+                NoDocbcCost,
+                GenHlth,
+                MentHlth,
+                PhysHlth,
+                DiffWalk,
+                Sex,
+                Age,
+                Education,
+                Income
                 ]
         
         ### PASO 0: se realiza la creación del input
