@@ -37,9 +37,9 @@ def prediction_individual(id_num):
     data = load_input(id_num)
 
     # se realiza la predicción
-    predictS = model_prediction(data, model)
+    predict = model_prediction(data, model)
 
-    n = predictS[0].ravel().tolist()
+    n = predict[0].ravel().tolist()
     nodiabetico = round(n[0]*100, 2)
     prediabetico = round(n[1]*100, 2)
     diabetico = round(n[2]*100, 2)
