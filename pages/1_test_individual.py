@@ -152,7 +152,7 @@ def prediction():
 
     # El botón predicción se usa para iniciar el procesamiento
     if st.button("Predicción:"):
-        id_num = id_num
+        
         x_in = [HighBP,
                 HighChol,
                 CholCheck,
