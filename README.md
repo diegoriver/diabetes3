@@ -24,8 +24,9 @@ We create an environment with python 3.10, and install the necessary dependencie
 - streamlit run home.py
 
 
-
-
+### 3. Production on cloud server 
+ https://abichallengediego-rivera-krsffntcbmtfkhgw2apphaa.streamlit.app/
+(people with access GitHub project)
 
 
 #### This developed system has been structured in two modes and three steps.
