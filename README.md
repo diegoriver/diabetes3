@@ -9,6 +9,7 @@ We will put this system into production using the Streamlit library and Google C
 ## THE STEPS TO FOLLOW ARE THOSE:
 
 ### 1. Model training
+I have taken my own previously trained model call model_diabetes.h5
 
 
 ### 2. Production on local server - environment preparation
@@ -19,18 +20,10 @@ We create an environment with python 3.10, and install the necessary dependencie
 - conda install python=3.10
 - pip install -r requirements.txt
 
-##### The following line must be executed to initialize the project
+##### The following comand line must be executed to initialize the project
 - streamlit run home.py
 
 
-### 3. Production on remote server
-
-- Activate an account in google cloud
-- Create project in google cloud
-- Install GoogleCloudSDK (https://cloud.google.com/sdk/docs/install)
-- Run in terminal:
-- - gcloud init
-- - gcloud app deploy app.yaml --project "Project name"
 
 
 
