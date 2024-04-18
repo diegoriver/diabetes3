@@ -1,4 +1,4 @@
-# Project for the Challenge "AB InBev MLOps Challenge v7"
+# Project for diabetes's detection"
  
 For this challenge, a DIABETES PREDICTION SYSTEM WITH A DEEP NEURONAL NETWORK was developed.
 
@@ -25,7 +25,6 @@ We create an environment with python 3.10, and install the necessary dependencie
 
 
 ### 3. Production on cloud server 
- https://abichallengediego-rivera-krsffntcbmtfkhgw2apphaa.streamlit.app/
 (people with access GitHub project)
 
 
